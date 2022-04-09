@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import app from './firebase.init';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -71,6 +71,12 @@ const App = () => {
     const handleResisteChange=(event)=>{
         setResister(event.target.checked)
     }
+    const handlePasswordReset=()=>{
+        sendPasswordResetEmail(auth,email)
+        .then(()=>{
+            console.log('email sent')
+        })
+    }
     return (
     <div className='w-50 mx-auto'>
         <h2 className='text-primary'>plese {resister? 'Login':'register'}</h2>
@@ -98,6 +104,8 @@ const App = () => {
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check onChange={handleResisteChange} type="checkbox" label="already resistered?" />
              </Form.Group>
+             <Button onClick={handlePasswordReset} variant='link'>forger password</Button>
+             <br />
             <Button variant="primary" type="submit">
                 {resister?'Login':'Resister'}
             </Button>
