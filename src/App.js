@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import app from './firebase.init';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -11,6 +11,8 @@ const App = () => {
     const [email, setEmail]=useState('')
     const [password, setPassword]=useState('')
     const [validated, setValidated] = useState(false);
+    const [error, setError]=useState('')
+    const [resister, setResister]=useState(false)
 
      const handelEmailBlur=(e)=>{
          setEmail(e.target.value)
@@ -27,24 +29,41 @@ const App = () => {
           return;
         }
         if(!/(?=.*?[#?!@$%^&*-])/.test(password)){
+            setError('you should set one special charecter')
             return;
         }
-    
+         setError('')
         setValidated(true);
 
-        
-         createUserWithEmailAndPassword(auth, email, password)
-         .then(result=>{
-             const user = result.user;
-             console.log(user)
-         })
-         .catch(error=>{
-             console.log(error)
-         })
-        event.preventDefault()
+        if(resister){
+           signInWithEmailAndPassword(auth,email,password)
+           .then(result=>{
+               const user = result.user;
+               console.log(user)
+           })
+           .catch(error=>{
+               console.log(error)
+               setError(error.message)
+           })
+        }else{
+
+            createUserWithEmailAndPassword(auth, email, password)
+            .then(result=>{
+                const user = result.user;
+                console.log(user)
+            })
+            .catch(error=>{
+                console.log(error)
+            })
+           event.preventDefault()
+        }
+    }
+    const handleResisteChange=(event)=>{
+        setResister(event.target.checked)
     }
     return (
     <div className='w-50 mx-auto'>
+        <h2 className='text-primary'>plese {resister? 'Login':'register'}</h2>
         <Form noValidate validated={validated} onSubmit={handleformSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
@@ -64,11 +83,13 @@ const App = () => {
                    Please provide a valid city.
                 </Form.Control.Feedback>
             </Form.Group>
+           
+            <p className='text-danger'>{error}</p>
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Check me out" />
-            </Form.Group>
+                <Form.Check onChange={handleResisteChange} type="checkbox" label="already resistered?" />
+             </Form.Group>
             <Button variant="primary" type="submit">
-                Submit
+                {resister?'Login':'Resister'}
             </Button>
         </Form>
     </div>
