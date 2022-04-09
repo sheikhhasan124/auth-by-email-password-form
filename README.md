@@ -4,6 +4,7 @@
 - sign in - already user  
 - sign up first time then resister 
 
+### js password validation regex  
 
 # Getting Started with Create React App
 
