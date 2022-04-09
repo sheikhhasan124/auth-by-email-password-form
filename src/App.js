@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, signInWithEmailAndPassword } from "firebase/auth";
 import app from './firebase.init';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
@@ -51,12 +51,22 @@ const App = () => {
             .then(result=>{
                 const user = result.user;
                 console.log(user)
+                setEmail('')
+                setPassword('')
+                verifyEmail()
             })
             .catch(error=>{
                 console.log(error)
             })
-           event.preventDefault()
+
         }
+        event.preventDefault()
+    }
+    const verifyEmail=()=>{
+        sendEmailVerification(auth.currentUser)
+        .then(()=>{
+            console.log('email verification sent')
+        })
     }
     const handleResisteChange=(event)=>{
         setResister(event.target.checked)
