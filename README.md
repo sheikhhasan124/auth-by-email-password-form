@@ -1,4 +1,8 @@
 # auth by form  
+- log in - already user 
+- resister  first time then resister    
+- sign in - already user  
+- sign up first time then resister 
 
 
 # Getting Started with Create React App
